@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-ghs",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "App installation token: ghs_ABCDEFghijklmnop1234567890abcdefghij"
+}

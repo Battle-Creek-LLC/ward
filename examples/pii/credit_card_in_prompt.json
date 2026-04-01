@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-pii-cc",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Charge the card 4111 1111 1111 1111 for the subscription"
+}

@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-npm",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "npm_ABCDEFghijklmnop1234567890abcdefghij"
+}

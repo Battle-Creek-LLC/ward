@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-ghpat",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Clone with this token: ghp_ABCDEFghijklmnop1234567890abcdefghij"
+}

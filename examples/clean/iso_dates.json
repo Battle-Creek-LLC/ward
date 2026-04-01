@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-dates",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Trade date: 2023-08-22, settlement: 2023-08-24, inception: 2023-01-01"
+}

@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-tickers",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "The portfolio has VOO, BND, DGRO, SPY, VTIP, AAPL, and VXUS. Account ID 45758, household 101, security 2."
+}

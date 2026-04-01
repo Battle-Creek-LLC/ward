@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-cusips",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "CUSIP 12345678 holds 150.0 shares at 380.0 per share. CUSIP 87654321 holds 86000.0 units. CASH equivalent."
+}

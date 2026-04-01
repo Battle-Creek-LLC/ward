@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-amounts",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Total value is 100000.0, with 60000.0 in equities and 400.0 in cash. Target weight 0.6, tolerance 0.05, drift 5 percent."
+}

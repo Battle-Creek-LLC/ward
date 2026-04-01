@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-redis",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "redis://default:r3d1sP@ss@cache.internal:6379/0"
+}

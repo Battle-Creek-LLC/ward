@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-gho",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "OAuth token: gho_ABCDEFghijklmnop1234567890abcdefghij"
+}

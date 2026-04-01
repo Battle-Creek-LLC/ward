@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-openai",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "sk-proj-abcdefghijklmnopqrstT3BlbkFJabcdefghijklmnopqrst"
+}

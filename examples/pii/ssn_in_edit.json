@@ -1,0 +1,12 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-pii-edit",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/tmp/config.py",
+    "old_string": "SSN_PLACEHOLDER",
+    "new_string": "ssn = \"123-45-6789\""
+  }
+}

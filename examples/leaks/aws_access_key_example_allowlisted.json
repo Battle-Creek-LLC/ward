@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-aws-allow",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "The docs show AKIAIOSFODNN7EXAMPLE as a placeholder"
+}

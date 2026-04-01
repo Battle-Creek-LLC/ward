@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-leaks-pem",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/tmp/key.pem",
+    "content": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA0Z3VS5JJcds3xfn/ygWyF6PkPfcLBBnBMBFOAlwLwHBLFkJQ\njP5Ky7kAHAHBrWshj3j9Fj2JZcMLhVXk8BzKWbRfXyl8LXkHt+eVRE9R4VgqJKm0\noKRQR6K+q7nDWJfbVBJrJfp6y8P5P0J1Z9E0a8z5tKkXJc+qXMBCJBo5DcLOGJ9G\n-----END RSA PRIVATE KEY-----"
+  }
+}

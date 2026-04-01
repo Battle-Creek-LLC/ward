@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-leaks-pg",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/tmp/.env",
+    "content": "DATABASE_URL=postgres://admin:s3cretP@ss@db.production.internal:5432/advicecloud"
+  }
+}

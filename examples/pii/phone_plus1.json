@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-pii-phone-plus1",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Reach me at +1 555-123-4567"
+}

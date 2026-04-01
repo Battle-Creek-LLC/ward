@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-clean-imports",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/tmp/app.ts",
+    "content": "import { token } from './config'\nimport { password } from './auth'\nimport { secret } from './crypto'\nimport { apiKey } from './keys'"
+  }
+}

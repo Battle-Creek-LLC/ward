@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-stripe-test",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "For testing use: sk_test_51HG3fE2eZvKYlo2C0EXAMPLE1234567890abc"
+}

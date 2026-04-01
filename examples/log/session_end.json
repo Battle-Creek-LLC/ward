@@ -1,0 +1,6 @@
+{
+  "hook_event_name": "SessionEnd",
+  "session_id": "sess-abc123",
+  "cwd": "/Users/dev/project",
+  "permission_mode": "default"
+}

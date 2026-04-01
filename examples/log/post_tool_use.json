@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PostToolUse",
+  "session_id": "sess-abc123",
+  "cwd": "/Users/dev/project",
+  "permission_mode": "default",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "git status"
+  },
+  "tool_result": "On branch main\nnothing to commit, working tree clean"
+}

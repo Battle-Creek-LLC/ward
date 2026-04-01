@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-leaks-openssh",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/tmp/id_ed25519",
+    "content": "-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\nQyNTUxOQAAACBGRLd4pTfxMqz+J5a8l0FsOFv3bI9xt7P7zGwZFg2KXAAAAJgd4z7xHeM+8Q==\n-----END OPENSSH PRIVATE KEY-----"
+  }
+}

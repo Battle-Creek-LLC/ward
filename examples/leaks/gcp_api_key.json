@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-gcp",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Set the GCP key to AIzaSyC1234567890abcdefghijklmnopqrstuv"
+}

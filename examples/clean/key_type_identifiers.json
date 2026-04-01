@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-keytypes",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Add a primary_key constraint, create a foreign_key reference, and expose the public_key field"
+}

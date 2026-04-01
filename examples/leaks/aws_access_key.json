@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-aws",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Use this AWS key: AKIAI44QH8DHBFAKE123"
+}

@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-pii-write",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/tmp/contacts.txt",
+    "content": "Primary contact: jane.smith@company.org\nBackup: bob@internal.io"
+  }
+}

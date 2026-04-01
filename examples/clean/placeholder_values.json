@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-placeholders",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Set SECRET=${MY_SECRET} and TOKEN=${AUTH_TOKEN} in the template"
+}

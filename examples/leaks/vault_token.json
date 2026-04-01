@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-vault",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "hvs.CAESIJZ4M3VhbGlkLWtleS1mb3ItdGVzdGluZy1wdXJwb3NlcxoQbGVhZF8xMjM0NTY3ODkwIhRsZWFkXzEyMzQ1Njc4OTBfYWJj"
+}

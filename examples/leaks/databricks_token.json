@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-databricks",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "dapi1234abcd5678efgh9012ijkl3456mn"
+}

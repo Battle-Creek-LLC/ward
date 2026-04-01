@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Can you refactor the rebalance module to handle wash sales better?"
+}

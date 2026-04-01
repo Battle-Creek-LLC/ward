@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-mongo",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "mongodb+srv://appuser:M0ng0P@ss@cluster0.abc123.mongodb.net/production?retryWrites=true"
+}

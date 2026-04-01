@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-leaks-multi",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/tmp/.env.production",
+    "content": "GITHUB_TOKEN=ghp_ABCDEFghijklmnop1234567890abcdefghij\nDATABASE_URL=postgres://admin:realpass@db:5432/prod\nSTRIPE_KEY=sk_live_51HG3fE2eZvKYlo2C0EXAMPLE1234567890abc\nSECRET=myS3cretV@lue123"
+  }
+}

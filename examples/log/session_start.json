@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "SessionStart",
+  "session_id": "sess-abc123",
+  "cwd": "/Users/dev/project",
+  "permission_mode": "default",
+  "transcript_path": "/tmp/transcript.jsonl"
+}

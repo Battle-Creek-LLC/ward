@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-enums",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Account: \"Investment Account\", type: \"IRA\", tax status: \"taxable\", lot selection: \"L\", method: \"tolerance\", flag: \"avoid_wash_sales\""
+}

@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-slack-bot",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Bot token: xoxb-1234567890123-1234567890123-AbCdEfGhIjKlMnOpQrStUv"
+}

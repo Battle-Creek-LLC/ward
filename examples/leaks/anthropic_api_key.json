@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-anthropic",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "sk-ant-api03-aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnooooppppqqqqrrrrssssttttuuuuvvvvwwwwAA"
+}

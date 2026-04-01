@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-pii-email",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Send the report to john.doe@example.com when it's ready"
+}

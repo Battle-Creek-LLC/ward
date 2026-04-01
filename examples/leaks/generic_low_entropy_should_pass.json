@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-generic-pass",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "api_key = 'changeme'"
+}

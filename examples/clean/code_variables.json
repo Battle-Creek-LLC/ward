@@ -1,0 +1,12 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-clean-vars",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/tmp/rebalance.py",
+    "old_string": "pass",
+    "new_string": "gains_budget_lt = abs_units * price\navoid_wash_sales = True\ntolerance_band = 0.05"
+  }
+}

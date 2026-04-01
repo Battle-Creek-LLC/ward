@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-pii-phone",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Call the client at (555) 123-4567 to confirm"
+}

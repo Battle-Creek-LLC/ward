@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-stripe",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Use the live key: sk_live_51HG3fE2eZvKYlo2C0EXAMPLE1234567890abc"
+}

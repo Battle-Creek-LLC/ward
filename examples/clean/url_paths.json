@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-clean-urls",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Hit the endpoint at https://api.example.com/v1/tokens and https://auth.internal.com/oauth/password/reset"
+}

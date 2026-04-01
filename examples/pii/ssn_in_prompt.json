@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-pii-ssn",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Can you look up the account for SSN 123-45-6789?"
+}

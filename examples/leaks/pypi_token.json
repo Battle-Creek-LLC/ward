@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-pypi",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "pypi-AgEIcHlwaS5vcmcCJGI2YjY5ZjIwLTVmODAtNDc4Ni05ZTIwLWM3MmM1MWYxZTBm"
+}

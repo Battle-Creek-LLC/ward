@@ -1,0 +1,10 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "sess-abc123",
+  "cwd": "/Users/dev/project",
+  "permission_mode": "default",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "python -m pytest src/rebalance/tests/test_rebalance.py::test_generate_rebalance_household[rebalance__raise_cash__tax.json] src/rebalance/tests/test_rebalance.py::test_generate_rebalance_household[rebalance__constrain_account.json] src/rebalance/tests/test_rebalance.py::test_generate_rebalance_household[rebalance__wash_sales.json] src/rebalance/tests/test_rebalance.py::test_generate_rebalance_household[rebalance__multi_account.json] -v --tb=short --no-header"
+  }
+}

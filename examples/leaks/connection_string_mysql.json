@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-leaks-mysql",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "Connect to mysql://root:password123@localhost:3306/mydb"
+}

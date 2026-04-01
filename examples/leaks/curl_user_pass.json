@@ -1,0 +1,10 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-leaks-curl-user",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "curl -u admin:s3cretP@ssw0rd https://api.internal.com/data"
+  }
+}

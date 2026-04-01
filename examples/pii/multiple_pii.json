@@ -1,0 +1,7 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "session_id": "test-pii-multi",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "content": "The client John Doe (SSN 987-65-4321) can be reached at john.doe@example.com or (555) 987-6543. His card on file is 4222-2222-2222-2222."
+}

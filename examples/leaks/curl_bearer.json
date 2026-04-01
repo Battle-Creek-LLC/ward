@@ -1,0 +1,10 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "test-leaks-curl-bearer",
+  "cwd": "/tmp",
+  "permission_mode": "default",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "curl -H 'Authorization: Bearer sk-realtoken123abcdef456' https://api.openai.com/v1/models"
+  }
+}
