@@ -3,5 +3,5 @@
   "session_id": "test-leaks-linear",
   "cwd": "/tmp",
   "permission_mode": "default",
-  "content": "lin_api_abcdef1234567890abcdef1234567890abcd"
+  "content": "lin_api_abcdef1234567890abcdef1234567890abcdef12"
 }

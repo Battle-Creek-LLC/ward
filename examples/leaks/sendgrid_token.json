@@ -3,5 +3,5 @@
   "session_id": "test-leaks-sendgrid",
   "cwd": "/tmp",
   "permission_mode": "default",
-  "content": "SG.abcdefghijklmnopqrstuv.wxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZab"
+  "content": "SG.abcdefghijklmnopqrstuv.wxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabc"
 }
