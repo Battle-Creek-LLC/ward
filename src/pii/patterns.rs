@@ -48,6 +48,11 @@ pub fn scan(text: &str) -> Vec<Match> {
     }
 
     for m in EMAIL.find_iter(text) {
+        // Skip git SSH remote URLs (user@host:path pattern)
+        let end = m.end();
+        if end < text.len() && text.as_bytes()[end] == b':' {
+            continue;
+        }
         matches.push(Match {
             category: "Email",
             matched_text: m.as_str().to_string(),
@@ -92,7 +97,18 @@ pub fn redact(text: &str) -> String {
         result.replace_range(range, "[REDACTED]");
     }
     result = CREDIT_CARD.replace_all(&result, "[REDACTED]").to_string();
-    result = EMAIL.replace_all(&result, "[REDACTED]").to_string();
+    // Redact emails but skip git SSH remote URLs (user@host:path pattern)
+    let email_ranges: Vec<std::ops::Range<usize>> = EMAIL
+        .find_iter(&result)
+        .filter(|m| {
+            let end = m.end();
+            !(end < result.len() && result.as_bytes()[end] == b':')
+        })
+        .map(|m| m.range())
+        .collect();
+    for range in email_ranges.into_iter().rev() {
+        result.replace_range(range, "[REDACTED]");
+    }
     result = PHONE.replace_all(&result, "[REDACTED]").to_string();
     result
 }

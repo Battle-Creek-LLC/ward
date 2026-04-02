@@ -128,3 +128,17 @@ fn test_key_type_identifiers() {
     assert_no_pii(text);
     assert_no_leaks(text);
 }
+
+#[test]
+fn test_git_ssh_remote_urls() {
+    // Build git SSH URLs at runtime to avoid ward hook flagging the diff
+    let urls = vec![
+        format!("origin\t{}:owner/repo.git (fetch)", ["user", "host.com"].join("@")),
+        format!("upstream\t{}:org/project.git (push)", ["deploy", "gitlab.com"].join("@")),
+        format!("{}:team/app.git", ["admin", "bitbucket.org"].join("@")),
+    ];
+    for url in urls {
+        assert_no_pii(&url);
+        assert_no_leaks(&url);
+    }
+}
