@@ -15,4 +15,6 @@ pub enum Command {
     Leaks,
     /// Log hook events to ~/.ward/events.jsonl
     Log,
+    /// Status line for Claude Code (reads statusLine JSON from stdin)
+    Status,
 }

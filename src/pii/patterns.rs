@@ -48,21 +48,23 @@ pub fn scan(text: &str) -> Vec<Match> {
     }
 
     for m in EMAIL.find_iter(text) {
+        let email = m.as_str();
         // Skip git SSH remote URLs (user@host:path pattern)
         let end = m.end();
         if end < text.len() && text.as_bytes()[end] == b':' {
             continue;
         }
         // Skip git SSH connections (git@host with no colon path)
-        let matched = m.as_str();
-        if let Some(local) = matched.split('@').next() {
-            if local == "git" {
-                continue;
-            }
+        if email.starts_with("git@") {
+            continue;
+        }
+        // Skip noreply addresses (automated/bot emails, not personal PII)
+        if email.starts_with("noreply@") || email.starts_with("no-reply@") {
+            continue;
         }
         matches.push(Match {
             category: "Email",
-            matched_text: matched.to_string(),
+            matched_text: email.to_string(),
         });
     }
 
@@ -108,14 +110,16 @@ pub fn redact(text: &str) -> String {
     let email_ranges: Vec<std::ops::Range<usize>> = EMAIL
         .find_iter(&result)
         .filter(|m| {
+            let email = m.as_str();
             let end = m.end();
             if end < result.len() && result.as_bytes()[end] == b':' {
                 return false;
             }
-            if let Some(local) = m.as_str().split('@').next() {
-                if local == "git" {
-                    return false;
-                }
+            if email.starts_with("git@") {
+                return false;
+            }
+            if email.starts_with("noreply@") || email.starts_with("no-reply@") {
+                return false;
             }
             true
         })
