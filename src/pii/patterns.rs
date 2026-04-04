@@ -53,9 +53,16 @@ pub fn scan(text: &str) -> Vec<Match> {
         if end < text.len() && text.as_bytes()[end] == b':' {
             continue;
         }
+        // Skip git SSH connections (git@host with no colon path)
+        let matched = m.as_str();
+        if let Some(local) = matched.split('@').next() {
+            if local == "git" {
+                continue;
+            }
+        }
         matches.push(Match {
             category: "Email",
-            matched_text: m.as_str().to_string(),
+            matched_text: matched.to_string(),
         });
     }
 
@@ -97,12 +104,20 @@ pub fn redact(text: &str) -> String {
         result.replace_range(range, "[REDACTED]");
     }
     result = CREDIT_CARD.replace_all(&result, "[REDACTED]").to_string();
-    // Redact emails but skip git SSH remote URLs (user@host:path pattern)
+    // Redact emails but skip git SSH remote/connection patterns
     let email_ranges: Vec<std::ops::Range<usize>> = EMAIL
         .find_iter(&result)
         .filter(|m| {
             let end = m.end();
-            !(end < result.len() && result.as_bytes()[end] == b':')
+            if end < result.len() && result.as_bytes()[end] == b':' {
+                return false;
+            }
+            if let Some(local) = m.as_str().split('@').next() {
+                if local == "git" {
+                    return false;
+                }
+            }
+            true
         })
         .map(|m| m.range())
         .collect();

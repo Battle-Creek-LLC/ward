@@ -142,3 +142,15 @@ fn test_git_ssh_remote_urls() {
         assert_no_leaks(&url);
     }
 }
+
+#[test]
+fn test_git_ssh_connection() {
+    // SSH connection with git user (no colon path after host)
+    let cmds = vec![
+        format!("ssh -T {} -i ~/.ssh/id_rsa 2>&1 || true", ["git", "github.com"].join("@")),
+        format!("ssh -T {}", ["git", "gitlab.com"].join("@")),
+    ];
+    for cmd in cmds {
+        assert_no_pii(&cmd);
+    }
+}
