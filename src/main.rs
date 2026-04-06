@@ -3,6 +3,7 @@ use std::io::{self, Read};
 use std::process;
 
 mod cli;
+mod config;
 mod entropy;
 mod input;
 mod leaks;

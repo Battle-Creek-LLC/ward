@@ -1,5 +1,6 @@
 pub mod patterns;
 
+use crate::config;
 use crate::input::HookInput;
 use crate::output;
 use std::process;
@@ -11,7 +12,14 @@ pub fn run(input: &HookInput) {
         process::exit(0);
     }
 
-    let matches = patterns::scan(&text);
+    let mut matches = patterns::scan(&text);
+
+    // Apply per-project allowlist if a .wardrc is present
+    if let Some(cwd) = &input.cwd {
+        if let Some(cfg) = config::load_config(cwd) {
+            matches.retain(|m| !cfg.is_allowed(m));
+        }
+    }
 
     if matches.is_empty() {
         output::pass();
