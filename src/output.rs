@@ -24,7 +24,7 @@ pub fn block(guard_name: &str, matches: &[Match]) {
 }
 
 /// Redact the middle of a matched string, keeping first/last few chars
-fn redact(s: &str) -> String {
+pub fn redact(s: &str) -> String {
     let len = s.len();
     if len <= 6 {
         return "*".repeat(len);
