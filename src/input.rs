@@ -14,6 +14,14 @@ pub struct HookInput {
 }
 
 impl HookInput {
+    /// Extract the file path from tool_input (present in Edit/Write payloads)
+    pub fn file_path(&self) -> Option<&str> {
+        self.tool_input
+            .as_ref()
+            .and_then(|input| input.get("file_path"))
+            .and_then(|v| v.as_str())
+    }
+
     /// Extract all scannable text from the hook input
     pub fn extract_text(&self) -> String {
         let mut parts = Vec::new();

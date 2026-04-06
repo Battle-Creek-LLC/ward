@@ -17,4 +17,12 @@ pub enum Command {
     Log,
     /// Status line for Claude Code (reads statusLine JSON from stdin)
     Status,
+    /// Temporarily disable ward scanning
+    Disable {
+        /// Minutes to disable for (default: 30)
+        #[arg(short, long, default_value_t = 30)]
+        minutes: u64,
+    },
+    /// Re-enable ward scanning (removes disable file)
+    Enable,
 }

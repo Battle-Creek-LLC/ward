@@ -1,5 +1,84 @@
 use ward::leaks::tier2;
 
+// --- File-type-aware Env Secret tests ---
+
+#[test]
+fn test_env_secret_skipped_for_python_files() {
+    let text = "Application.objects.create(client_secret=plain_secret)";
+    let matches = tier2::scan_with_path(text, Some("/app/models.py"));
+    assert!(matches.is_empty(), "Should not flag client_secret= in .py files");
+}
+
+#[test]
+fn test_env_secret_skipped_for_js_files() {
+    let text = "const config = { password=getValue() }";
+    let matches = tier2::scan_with_path(text, Some("/app/config.js"));
+    assert!(matches.is_empty(), "Should not flag password= in .js files");
+}
+
+#[test]
+fn test_env_secret_skipped_for_go_files() {
+    let text = "secret=os.Getenv(\"SECRET\")";
+    let matches = tier2::scan_with_path(text, Some("main.go"));
+    assert!(matches.is_empty(), "Should not flag secret= in .go files");
+}
+
+#[test]
+fn test_env_secret_skipped_for_rs_files() {
+    let text = "lower.contains(\"secret=\") || lower.contains(\"password=\")";
+    let matches = tier2::scan_with_path(text, Some("src/leaks/tier2.rs"));
+    assert!(matches.is_empty(), "Should not flag secret= in .rs files");
+}
+
+#[test]
+fn test_env_secret_enabled_for_env_files() {
+    let text = "SECRET=actual_value_here";
+    let matches = tier2::scan_with_path(text, Some("/app/.env"));
+    assert!(!matches.is_empty(), "Should flag SECRET= in .env files");
+    assert_eq!(matches[0].category, "Env Secret");
+}
+
+#[test]
+fn test_env_secret_enabled_for_sh_files() {
+    let text = "export PASSWORD=hunter2";
+    let matches = tier2::scan_with_path(text, Some("deploy.sh"));
+    assert!(!matches.is_empty(), "Should flag PASSWORD= in .sh files");
+}
+
+#[test]
+fn test_env_secret_enabled_for_yaml_files() {
+    let text = "DATABASE_URL=postgresql://user:pw@host/db";
+    let matches = tier2::scan_with_path(text, Some("config.yaml"));
+    assert!(!matches.is_empty(), "Should flag DATABASE_URL= in .yaml files");
+}
+
+#[test]
+fn test_env_secret_enabled_for_no_file_path() {
+    // When no file path is provided (e.g. Bash commands), ENV_SECRET stays enabled
+    let text = "PASSWORD=hunter2";
+    let matches = tier2::scan_with_path(text, None);
+    assert!(!matches.is_empty(), "Should flag PASSWORD= when no file path");
+}
+
+#[test]
+fn test_other_detectors_still_active_for_source_code() {
+    // Private key blocks should still be detected in .py files
+    let key = "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA0Z3VS5JJcds3xfn/ygWyF6PkPfcLBBnBMBFOAlwLwHBLFkJQ\nmore_key_data_here_to_make_it_long_enough_for_the_pattern\n-----END RSA PRIVATE KEY-----";
+    let matches = tier2::scan_with_path(key, Some("secrets.py"));
+    assert!(!matches.is_empty(), "Private key should be detected in .py files");
+    assert_eq!(matches[0].category, "Private Key");
+}
+
+#[test]
+fn test_connection_string_still_active_for_source_code() {
+    let text = "postgres://admin:s3cret@db.host:5432/prod";
+    let matches = tier2::scan_with_path(text, Some("db.py"));
+    assert!(!matches.is_empty(), "Connection string should be detected in .py files");
+    assert_eq!(matches[0].category, "Connection String");
+}
+
+// --- Original tests ---
+
 #[test]
 fn test_private_key_rsa() {
     let key = "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA0Z3VS5JJcds3xfn/ygWyF6PkPfcLBBnBMBFOAlwLwHBLFkJQ\nmore_key_data_here_to_make_it_long_enough_for_the_pattern\n-----END RSA PRIVATE KEY-----";

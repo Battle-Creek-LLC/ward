@@ -18,13 +18,44 @@ static ENV_SECRET: Lazy<Regex> = Lazy::new(|| {
     Regex::new(r"(?i)(?:SECRET|PASSWORD|TOKEN|CLIENT_SECRET|DATABASE_URL|PRIVATE_KEY)=(\S+)").unwrap()
 });
 
+/// Source code extensions where the Env Secret (KEY=VALUE) pattern produces
+/// too many false positives (keyword args, format strings, field lists).
+const SOURCE_CODE_EXTENSIONS: &[&str] = &[
+    ".py", ".js", ".ts", ".go", ".java", ".rb", ".rs",
+    ".jsx", ".tsx", ".cs", ".cpp", ".c", ".h", ".hpp",
+    ".kt", ".scala", ".swift", ".m", ".mm", ".lua",
+    ".php", ".pl", ".pm", ".r", ".jl", ".ex", ".exs",
+    ".zig", ".nim", ".dart", ".groovy", ".v", ".cr",
+];
+
+/// Returns true if the file path has a source-code extension where the
+/// ENV_SECRET pattern should be skipped.
+fn is_source_code(file_path: Option<&str>) -> bool {
+    match file_path {
+        Some(p) => {
+            let lower = p.to_lowercase();
+            SOURCE_CODE_EXTENSIONS.iter().any(|ext| lower.ends_with(ext))
+        }
+        None => false,
+    }
+}
+
 pub fn scan(text: &str) -> Vec<Match> {
+    scan_with_path(text, None)
+}
+
+pub fn scan_with_path(text: &str, file_path: Option<&str>) -> Vec<Match> {
     let mut matches = Vec::new();
     let lower = text.to_lowercase();
 
+    let skip_env = is_source_code(file_path);
+
+    let has_env_kw = !skip_env
+        && (lower.contains("secret=") || lower.contains("password=") || lower.contains("token=")
+            || lower.contains("client_secret=") || lower.contains("database_url=") || lower.contains("private_key="));
+
     if !lower.contains("-----begin") && !lower.contains("ey") && !lower.contains("://")
-        && !lower.contains("secret=") && !lower.contains("password=") && !lower.contains("token=")
-        && !lower.contains("client_secret=") && !lower.contains("database_url=") && !lower.contains("private_key=")
+        && !has_env_kw
     {
         return matches;
     }
@@ -50,29 +81,31 @@ pub fn scan(text: &str) -> Vec<Match> {
         });
     }
 
-    for m in ENV_SECRET.captures_iter(text) {
-        let full_match = m.get(0).unwrap().as_str();
-        let value = m.get(1).map(|v| v.as_str()).unwrap_or("");
-        // Skip template variables like ${MY_SECRET}
-        if value.starts_with("${") || value.starts_with("$(") {
-            continue;
+    if !skip_env {
+        for m in ENV_SECRET.captures_iter(text) {
+            let full_match = m.get(0).unwrap().as_str();
+            let value = m.get(1).map(|v| v.as_str()).unwrap_or("");
+            // Skip template variables like ${MY_SECRET}
+            if value.starts_with("${") || value.starts_with("$(") {
+                continue;
+            }
+            // Skip empty values
+            if value.is_empty() {
+                continue;
+            }
+            // Skip schema/DDL patterns like VARCHAR(255)
+            if full_match.contains("VARCHAR")
+                || full_match.contains("TIMESTAMP")
+                || full_match.contains("TEXT")
+                || full_match.contains("INT")
+            {
+                continue;
+            }
+            matches.push(Match {
+                category: "Env Secret",
+                matched_text: full_match.to_string(),
+            });
         }
-        // Skip empty values
-        if value.is_empty() {
-            continue;
-        }
-        // Skip schema/DDL patterns like VARCHAR(255)
-        if full_match.contains("VARCHAR")
-            || full_match.contains("TIMESTAMP")
-            || full_match.contains("TEXT")
-            || full_match.contains("INT")
-        {
-            continue;
-        }
-        matches.push(Match {
-            category: "Env Secret",
-            matched_text: full_match.to_string(),
-        });
     }
 
     matches

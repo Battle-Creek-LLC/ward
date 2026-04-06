@@ -14,9 +14,11 @@ pub fn run(input: &HookInput) {
         process::exit(0);
     }
 
+    let file_path = input.file_path();
+
     let mut matches = Vec::new();
     matches.extend(tier1::scan(&text));
-    matches.extend(tier2::scan(&text));
+    matches.extend(tier2::scan_with_path(&text, file_path));
     matches.extend(tier3::scan(&text));
 
     if matches.is_empty() {
