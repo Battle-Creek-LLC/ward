@@ -15,4 +15,18 @@ pub enum Command {
     Leaks,
     /// Log hook events to ~/.ward/events.jsonl
     Log,
+    /// Configure Claude Code hooks in ~/.claude/settings.json
+    Init {
+        /// Print the resulting config without modifying any files
+        #[arg(long)]
+        dry_run: bool,
+
+        /// Overwrite existing ward hooks instead of erroring
+        #[arg(long)]
+        force: bool,
+
+        /// Remove ward hooks from settings.json
+        #[arg(long)]
+        remove: bool,
+    },
 }
