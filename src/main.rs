@@ -49,6 +49,15 @@ fn main() {
         }
     };
 
+    // Allow users to bypass scanning for a single prompt with "ward-skip" prefix
+    if hook_input.hook_event_name == "UserPromptSubmit" {
+        let text = hook_input.extract_text();
+        if text.trim_start().starts_with("ward-skip") {
+            output::pass();
+            process::exit(0);
+        }
+    }
+
     match args.command {
         cli::Command::Pii => pii::run(&hook_input),
         cli::Command::Leaks => leaks::run(&hook_input),
