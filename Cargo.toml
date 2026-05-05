@@ -1,6 +1,6 @@
 [package]
 name = "bcl-ward"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Claude Code hook CLI — PII guard, leak detection, event logging"
 license = "MIT"
@@ -8,6 +8,11 @@ repository = "https://github.com/Battle-Creek-LLC/ward"
 readme = "README.md"
 keywords = ["claude-code", "pii", "secrets", "hook", "cli"]
 categories = ["command-line-utilities"]
+
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/ward-{ target }.tar.gz"
+pkg-fmt = "tgz"
+bin-dir = "ward{ binary-ext }"
 
 [lib]
 name = "ward"
