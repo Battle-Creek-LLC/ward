@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] — 2026-05-05
+
+### Changed
+
+- Rename the Cargo package from `ward` to `bcl-ward` so it can be
+  published to crates.io. The crate name `ward` was already taken by an
+  unrelated upstream project (a `ward!` early-return macro). The
+  installed binary is unchanged — `cargo install bcl-ward` still
+  produces a `ward` executable, via an explicit `[[bin]] name = "ward"`
+  block. The library crate is also kept as `ward` (`use ward::...`) via
+  `[lib] name = "ward"` so existing test imports continue to compile.
+- Add `license`, `repository`, `readme`, `keywords`, and `categories`
+  metadata to `Cargo.toml` so it meets crates.io publishing
+  requirements.
+
 ## [0.1.0] — 2026-04-29
 
 First tagged release. Ward integrates with Claude Code hooks to block PII,
@@ -28,4 +43,5 @@ as a single Rust binary with no runtime dependencies.
 - Prebuilt binaries on each tagged release for Linux (x86_64, aarch64),
   macOS (x86_64, aarch64), and Windows (x86_64).
 
+[0.1.1]: https://github.com/Battle-Creek-LLC/ward/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Battle-Creek-LLC/ward/releases/tag/v0.1.0

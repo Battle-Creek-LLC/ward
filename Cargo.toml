@@ -1,8 +1,21 @@
 [package]
-name = "ward"
-version = "0.1.0"
+name = "bcl-ward"
+version = "0.1.1"
 edition = "2021"
 description = "Claude Code hook CLI — PII guard, leak detection, event logging"
+license = "MIT"
+repository = "https://github.com/Battle-Creek-LLC/ward"
+readme = "README.md"
+keywords = ["claude-code", "pii", "secrets", "hook", "cli"]
+categories = ["command-line-utilities"]
+
+[lib]
+name = "ward"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ward"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
