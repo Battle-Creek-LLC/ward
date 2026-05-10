@@ -17,7 +17,7 @@ pub fn block(guard_name: &str, matches: &[Match]) {
         .collect();
 
     eprintln!(
-        "WARD {} BLOCKED: Detected {}. Remove sensitive data before proceeding.",
+        "WARD {} BLOCKED: Detected {}.\nRemove the sensitive data before proceeding.\nIf this is a false positive, run `ward disable -m 5` to skip scanning briefly.",
         guard_name,
         descriptions.join(", ")
     );

@@ -206,10 +206,14 @@ After building the binary, configure in `.claude/settings.json`:
 - Exit code: `2`
 - Stderr: Human-readable message, e.g.:
   ```
-  WARD PII BLOCKED: Detected SSN pattern (***-**-6789) in input. Remove sensitive data before proceeding.
+  WARD PII BLOCKED: Detected SSN pattern (***-**-6789).
+  Remove the sensitive data before proceeding.
+  If this is a false positive, run `ward disable -m 5` to skip scanning briefly.
   ```
   ```
-  WARD LEAKS BLOCKED: Detected AWS Access Key (AKIA********MPLE). Remove credentials before proceeding.
+  WARD LEAKS BLOCKED: Detected AWS Access Key (AKIA********MPLE).
+  Remove the sensitive data before proceeding.
+  If this is a false positive, run `ward disable -m 5` to skip scanning briefly.
   ```
 
 ### Output — Non-blocking hooks (log)
@@ -775,7 +779,7 @@ pub fn block(guard_name: &str, matches: &[Match]) {
         .collect();
 
     eprintln!(
-        "WARD {} BLOCKED: Detected {}. Remove sensitive data before proceeding.",
+        "WARD {} BLOCKED: Detected {}.\nRemove the sensitive data before proceeding.\nIf this is a false positive, run `ward disable -m 5` to skip scanning briefly.",
         guard_name,
         descriptions.join(", ")
     );
