@@ -1,0 +1,13 @@
+# ward is itself a secret-leak scanner. The paths below contain ward's own
+# detection corpus — deliberately-fabricated example secrets and JWTs used as
+# test fixtures and in spec documentation. They are NOT live credentials, so
+# Semgrep's p/secrets rules flag them as false positives in code scanning.
+# Exclude them from scanning.
+
+# Leak detection test fixtures (fabricated example secrets)
+examples/leaks/
+
+# Spec / planning docs that embed the canonical illustrative JWT
+# (header {"alg":"HS256"}, payload {"sub":"1234567890"}) as documented test inputs
+IMPLEMENTATION_PLAN.md
+ward-spec.md
