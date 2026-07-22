@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in place, the entire output is withheld. Handles both string and structured
   (object) tool responses.
 
+### Upgrade notes
+
+- Output redaction is opt-in via hook configuration: add `ward pii` and
+  `ward leaks` entries under `PostToolUse` in `~/.claude/settings.json`
+  (see the README's hook configuration). Without them, 0.2.0 behaves
+  exactly like 0.1.4.
+
 ## [0.1.4] — 2026-05-10
 
 ### Changed

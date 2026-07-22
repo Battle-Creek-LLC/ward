@@ -54,16 +54,40 @@ Zero false positives on financial data, tickers, CUSIPs, dollar amounts, percent
 
 ## Install
 
+From crates.io:
+
 ```bash
-# Build from source
-cargo build --release
-
-# Install
-cp target/release/ward ~/.local/bin/ward
-
-# Verify
-ward --help
+cargo install bcl-ward
 ```
+
+Or download a prebuilt binary from the [latest release](https://github.com/Battle-Creek-LLC/ward/releases/latest)
+(macOS arm64/x86_64, Linux arm64/x86_64, Windows x86_64):
+
+```bash
+curl -sL https://github.com/Battle-Creek-LLC/ward/releases/latest/download/ward-aarch64-apple-darwin.tar.gz | tar xz
+mv ward ~/.local/bin/ward
+```
+
+Or build from source:
+
+```bash
+cargo build --release
+cp target/release/ward ~/.local/bin/ward
+```
+
+Verify with `ward --help`.
+
+## Upgrading
+
+Replace the binary using the same method you installed with
+(`cargo install bcl-ward --force`, or re-download the release archive).
+Hooks pick up the new binary on the next event — no restart needed. Check the
+[CHANGELOG](CHANGELOG.md) for release-specific steps.
+
+**Upgrading to 0.2.0:** output redaction only runs if `ward pii` and
+`ward leaks` are registered under `PostToolUse`. Existing installs have them
+under `UserPromptSubmit`/`PreToolUse` only — add the `PostToolUse` entries
+shown in the hook configuration below to enable it.
 
 ## Configure Claude Code Hooks
 
