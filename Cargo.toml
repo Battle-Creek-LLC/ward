@@ -1,6 +1,6 @@
 [package]
 name = "bcl-ward"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2021"
 description = "Claude Code hook CLI — PII guard, leak detection, event logging"
 license = "MIT"
