@@ -8,9 +8,16 @@ Ward scans every prompt you send and every tool call Claude makes, blocking sens
 
 | Subcommand | Hook Events | Purpose |
 |---|---|---|
-| `ward pii` | UserPromptSubmit, PreToolUse | Block SSNs, credit cards, emails, phone numbers |
-| `ward leaks` | UserPromptSubmit, PreToolUse | Block API keys, cloud credentials, tokens, passwords, private keys, connection strings |
+| `ward pii` | UserPromptSubmit, PreToolUse, PostToolUse | Block SSNs, credit cards, emails, phone numbers |
+| `ward leaks` | UserPromptSubmit, PreToolUse, PostToolUse | Block API keys, cloud credentials, tokens, passwords, private keys, connection strings |
 | `ward log` | All events | Structured event logging to `~/.ward/events.jsonl` |
+
+On UserPromptSubmit and PreToolUse, a match **blocks** (exit 2) before anything
+leaves your machine. On PostToolUse the tool has already run, so blocking is
+impossible — instead ward **redacts**: it rewrites the tool output via the
+hook's `updatedToolOutput` field, replacing each secret with a
+`[WARD LEAKS REDACTED: <category>]` (or `WARD PII`) marker before Claude ever
+sees it. If a match can't be masked in place, the whole output is withheld.
 
 ## Detection Coverage
 
@@ -106,6 +113,23 @@ Add to `~/.claude/settings.json`:
       { "hooks": [{ "type": "command", "command": "/path/to/ward log", "timeout": 5, "async": true }] }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Bash|Read|WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/ward pii",
+            "timeout": 5,
+            "statusMessage": "Scanning output for PII..."
+          },
+          {
+            "type": "command",
+            "command": "/path/to/ward leaks",
+            "timeout": 5,
+            "statusMessage": "Scanning output for secrets..."
+          }
+        ]
+      },
       { "hooks": [{ "type": "command", "command": "/path/to/ward log", "timeout": 5, "async": true }] }
     ],
     "Stop": [
@@ -136,6 +160,15 @@ ward pii + ward leaks  (UserPromptSubmit hook)
                 |
                 +-- Secret found -> exit 2 -> tool call blocked
                 +-- Clean -> exit 0 -> tool executes
+                          |
+                          v
+                    tool output returns
+                          |
+                          v
+          ward pii + ward leaks  (PostToolUse hook)
+                |
+                +-- Secret found -> output rewritten with [WARD ... REDACTED] markers
+                +-- Clean -> output passes through unchanged
 ```
 
 Everything runs locally. Nothing leaves your machine.
@@ -149,7 +182,7 @@ Everything runs locally. Nothing leaves your machine.
 ## Testing
 
 ```bash
-# Run all unit and integration tests (105 tests)
+# Run all unit and integration tests (138 tests)
 cargo test
 
 # Run example fixture tests (82 tests)

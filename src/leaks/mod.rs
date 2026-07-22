@@ -26,6 +26,14 @@ pub fn run(input: &HookInput) {
         process::exit(0);
     }
 
+    // PostToolUse can't block (the tool already ran) — redact the output instead
+    if input.hook_event_name == "PostToolUse" {
+        if let Some(response) = &input.tool_response {
+            output::redact_output("LEAKS", response, &matches);
+            process::exit(0);
+        }
+    }
+
     output::block("LEAKS", &matches);
     process::exit(2);
 }

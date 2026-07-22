@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- PostToolUse support for `ward pii` and `ward leaks`: tool output is now
+  scanned, and matches are redacted in place via the hook's
+  `hookSpecificOutput.updatedToolOutput` mechanism (the tool has already run,
+  so blocking is impossible at this stage). Each secret is replaced with a
+  `[WARD <guard> REDACTED: <category>]` marker; if a match cannot be masked
+  in place, the entire output is withheld. Handles both string and structured
+  (object) tool responses.
+
 ## [0.1.4] — 2026-05-10
 
 ### Changed

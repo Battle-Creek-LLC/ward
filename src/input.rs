@@ -7,6 +7,7 @@ pub struct HookInput {
     pub hook_event_name: String,
     pub tool_name: Option<String>,
     pub tool_input: Option<Value>,
+    pub tool_response: Option<Value>,
     pub cwd: Option<String>,
     pub permission_mode: Option<String>,
     #[serde(flatten)]
@@ -40,6 +41,12 @@ impl HookInput {
             "PreToolUse" => {
                 if let Some(input) = &self.tool_input {
                     collect_strings(input, &mut parts);
+                }
+            }
+            "PostToolUse" => {
+                // Scan only the tool's output; its input was already scanned at PreToolUse
+                if let Some(response) = &self.tool_response {
+                    collect_strings(response, &mut parts);
                 }
             }
             _ => {}
