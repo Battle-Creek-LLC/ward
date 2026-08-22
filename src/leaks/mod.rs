@@ -34,6 +34,12 @@ pub fn run(input: &HookInput) {
         }
     }
 
+    // PreToolUse has a permission model — ask the user instead of aborting
+    if input.hook_event_name == "PreToolUse" {
+        output::ask("LEAKS", &matches);
+        process::exit(0);
+    }
+
     output::block("LEAKS", &matches);
     process::exit(2);
 }

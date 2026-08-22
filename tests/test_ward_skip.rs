@@ -2,7 +2,11 @@ use assert_cmd::Command;
 use predicates::prelude::*;
 
 fn ward() -> Command {
-    Command::cargo_bin("ward").unwrap()
+    let mut cmd = Command::cargo_bin("ward").unwrap();
+    // Pin HOME to the target tmpdir so a real `ward disable -m N` on the
+    // developer's machine can't silently turn every assertion into a pass.
+    cmd.env("HOME", env!("CARGO_TARGET_TMPDIR"));
+    cmd
 }
 
 /// Build a UserPromptSubmit JSON payload with the given content
@@ -71,8 +75,11 @@ fn test_ward_skip_does_not_apply_to_tool_use() {
         .arg("pii")
         .write_stdin(payload)
         .assert()
-        .code(2)
-        .stderr(predicate::str::contains("SSN"));
+        .success()
+        .stdout(
+            predicate::str::contains(r#""permissionDecision":"ask""#)
+                .and(predicate::str::contains("SSN")),
+        );
 }
 
 #[test]

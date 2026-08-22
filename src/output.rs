@@ -87,20 +87,42 @@ fn replace_in_value(value: &mut Value, needle: &str, replacement: &str) {
     }
 }
 
-pub fn block(guard_name: &str, matches: &[Match]) {
-    let descriptions: Vec<String> = matches
-        .iter()
-        .map(|m| {
-            let redacted = redact(&m.matched_text);
-            format!("{} ({})", m.category, redacted)
-        })
-        .collect();
+/// PreToolUse: hand the decision to the user via `permissionDecision: "ask"`
+/// instead of a hard block. A false positive then costs one keystroke at the
+/// permission prompt rather than an aborted turn. Must exit 0 — exit 2 blocks
+/// regardless of what this JSON says.
+pub fn ask(guard_name: &str, matches: &[Match]) {
+    let response = serde_json::json!({
+        "hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "permissionDecision": "ask",
+            "permissionDecisionReason": format!(
+                "WARD {} detected {}. Approve only if this is safe to send.",
+                guard_name,
+                describe(matches)
+            ),
+        }
+    });
+    println!("{response}");
+}
 
+pub fn block(guard_name: &str, matches: &[Match]) {
     eprintln!(
         "WARD {} BLOCKED: Detected {}.\nRemove the sensitive data before proceeding.\nIf this is a false positive, run `ward disable -m 5` to skip scanning briefly.",
         guard_name,
-        descriptions.join(", ")
+        describe(matches)
     );
+}
+
+/// Render matches as "Category (ab***yz), Category (…)" with each match
+/// partially redacted, so the user can judge a false positive without the
+/// full secret being reprinted.
+fn describe(matches: &[Match]) -> String {
+    matches
+        .iter()
+        .map(|m| format!("{} ({})", m.category, redact(&m.matched_text)))
+        .collect::<Vec<String>>()
+        .join(", ")
 }
 
 /// Redact the middle of a matched string, keeping first/last few chars
