@@ -2,9 +2,12 @@ use clap::Parser;
 use std::io::{self, Read};
 use std::process;
 
+mod allow;
 mod cli;
+mod config;
 mod disable;
 mod entropy;
+mod guard;
 mod input;
 mod leaks;
 mod log;
@@ -27,6 +30,31 @@ fn main() {
         }
         cli::Command::Enable => {
             disable::clear();
+            return;
+        }
+        cli::Command::Allow {
+            entry,
+            pattern,
+            path,
+            local,
+            list,
+        } => {
+            if *list {
+                allow::list();
+                return;
+            }
+            let Some(entry) = entry else {
+                eprintln!("ward: allow needs a value, or --list to show the config");
+                process::exit(1);
+            };
+            let kind = if *pattern {
+                allow::Kind::Pattern
+            } else if *path {
+                allow::Kind::Path
+            } else {
+                allow::Kind::Value
+            };
+            allow::add(entry, kind, *local);
             return;
         }
         _ => {}
@@ -62,8 +90,9 @@ fn main() {
         cli::Command::Pii => pii::run(&hook_input),
         cli::Command::Leaks => leaks::run(&hook_input),
         cli::Command::Log => log::run(&hook_input),
-        cli::Command::Status | cli::Command::Disable { .. } | cli::Command::Enable => {
-            unreachable!()
-        }
+        cli::Command::Status
+        | cli::Command::Disable { .. }
+        | cli::Command::Enable
+        | cli::Command::Allow { .. } => unreachable!(),
     }
 }

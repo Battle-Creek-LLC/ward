@@ -1,4 +1,7 @@
+pub mod allow;
+pub mod config;
 pub mod entropy;
+pub mod guard;
 pub mod input;
 pub mod leaks;
 pub mod log;

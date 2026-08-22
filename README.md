@@ -176,6 +176,74 @@ Add to `~/.claude/settings.json`:
 
 Replace `/path/to/ward` with the absolute path to your binary (e.g., `/Users/you/.local/bin/ward`).
 
+## Configuration
+
+Ward reads two optional TOML files. `~/.ward/config.toml` holds your defaults;
+a `.ward.toml` found by walking up from the working directory holds per-repo
+overrides. The repo file wins key by key — a key it omits keeps the user-level
+value, and allowlists concatenate rather than replace. With neither file
+present ward behaves exactly as it does without this feature.
+
+See [`examples/config.toml`](examples/config.toml) for an annotated starting point.
+
+```toml
+[mode]
+default          = "ask"
+UserPromptSubmit = "block"
+PostToolUse      = "redact"
+
+[categories]
+"Generic API Key" = "warn"
+"Email"           = "off"
+
+[allow]
+patterns = ['@yourcompany\.com']
+paths    = ["tests/fixtures/**", "**/*.md"]
+values   = ["dummy-token-for-tests"]
+```
+
+### Modes
+
+| Mode | Effect | Available on |
+|---|---|---|
+| `block` | Abort with exit 2 | UserPromptSubmit, PreToolUse |
+| `ask` | You approve or reject at the permission prompt | PreToolUse |
+| `warn` | Allow, but tell Claude what was seen via `additionalContext` | all events |
+| `redact` | Mask the match in the tool output | PostToolUse |
+| `off` | Ignore the match | all events |
+
+A mode the event can't express degrades to the nearest mode that is **no
+weaker**, so a typo can't silently let a credential through: `ask` becomes
+`block` on UserPromptSubmit, `block` and `ask` become `redact` on PostToolUse,
+`redact` becomes `ask` on PreToolUse. Set that event's mode explicitly to
+overrule the degradation.
+
+Precedence is category → event → `default` → built-in. When one scan produces
+matches at different modes, the strictest one decides the response.
+
+### Allowlists
+
+- `patterns` — regexes tested against the detected text
+- `paths` — globs tested against the tool's `file_path`; a hit exempts the whole file
+- `values` — literal detected values to ignore
+
+A malformed config file, bad regex, or bad glob is reported on stderr and
+skipped. Ward falls back to its built-in defaults rather than running with no
+policy.
+
+### `ward allow`
+
+Append an exemption after a false positive instead of hand-editing TOML.
+Comments and key order in the file are preserved.
+
+```bash
+ward allow 'dummy-token-for-tests'      # literal value
+ward allow --pattern '@yourcompany\.com' # regex
+ward allow --path 'tests/fixtures/**'   # file glob
+ward allow --local 'value'              # write ./.ward.toml, not ~/.ward/config.toml
+ward allow --list                       # show both config files and their contents
+```
+
 ## How It Works
 
 ```
@@ -247,7 +315,10 @@ src/
   main.rs           # CLI entry point
   cli.rs            # Clap subcommand definitions
   input.rs          # Hook JSON parsing + text extraction
-  output.rs         # Pass/block output formatting
+  output.rs         # Pass/block/ask/warn/redact output formatting
+  config.rs         # Config discovery, modes, allowlists
+  guard.rs          # Shared decision path: filter, resolve mode, respond
+  allow.rs          # `ward allow` config writer
   entropy.rs        # Shannon entropy for Tier 3 gating
   pii/
     mod.rs           # PII scanner

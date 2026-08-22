@@ -1,0 +1,42 @@
+# Ward configuration. Copy to ~/.ward/config.toml for your defaults, or to
+# .ward.toml in a repo root for per-project overrides. Both are optional and
+# the repo file wins key by key.
+
+[mode]
+# block  — abort (exit 2). UserPromptSubmit and PreToolUse only.
+# ask    — hand the decision to you at the permission prompt. PreToolUse only.
+# warn   — allow, but tell Claude what was seen. Every event.
+# redact — mask the match in the tool output. PostToolUse only.
+# off    — ignore the match.
+#
+# A mode an event can't express degrades to the nearest mode that is no
+# weaker: `ask` becomes `block` on UserPromptSubmit, `block` becomes `redact`
+# on PostToolUse. Set the event's mode explicitly to overrule that.
+default          = "ask"
+UserPromptSubmit = "block"
+PostToolUse      = "redact"
+
+[categories]
+# Per-category overrides, keyed by the name ward reports in its message.
+# These two are the usual sources of false positives on internal content:
+# Tier 3's generic detector fires on high-entropy config values and UUIDs
+# that sit near the word "key" or "token", and every internal doc has emails.
+"Generic API Key" = "warn"
+"Email"           = "off"
+
+[allow]
+# Regexes tested against the detected text.
+patterns = [
+  # '@yourcompany\.com',
+]
+
+# Globs tested against the tool's file path. A hit exempts the whole file.
+paths = [
+  # "tests/fixtures/**",
+  # "**/*.md",
+]
+
+# Literal detected values to ignore. `ward allow <value>` appends here.
+values = [
+  # "dummy-token-for-tests",
+]

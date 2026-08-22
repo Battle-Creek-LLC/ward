@@ -106,6 +106,24 @@ pub fn ask(guard_name: &str, matches: &[Match]) {
     println!("{response}");
 }
 
+/// Let the event through but tell Claude what was seen, via
+/// `additionalContext`. Supported on all three events, so this is the one
+/// mode that behaves identically everywhere. Nothing is blocked or rewritten.
+pub fn warn(guard_name: &str, event: &str, matches: &[Match]) {
+    let response = serde_json::json!({
+        "hookSpecificOutput": {
+            "hookEventName": event,
+            "additionalContext": format!(
+                "WARD {} detected {}. This was allowed through under `warn` mode \
+                 — do not repeat the value back in your response.",
+                guard_name,
+                describe(matches)
+            ),
+        }
+    });
+    println!("{response}");
+}
+
 pub fn block(guard_name: &str, matches: &[Match]) {
     eprintln!(
         "WARD {} BLOCKED: Detected {}.\nRemove the sensitive data before proceeding.\nIf this is a false positive, run `ward disable -m 5` to skip scanning briefly.",
