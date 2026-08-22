@@ -2,7 +2,11 @@ use assert_cmd::Command;
 use predicates::prelude::*;
 
 fn ward() -> Command {
-    Command::cargo_bin("ward").unwrap()
+    let mut cmd = Command::cargo_bin("ward").unwrap();
+    // Pin HOME to the target tmpdir so a real `ward disable -m N` on the
+    // developer's machine can't silently turn every assertion into a pass.
+    cmd.env("HOME", env!("CARGO_TARGET_TMPDIR"));
+    cmd
 }
 
 #[test]

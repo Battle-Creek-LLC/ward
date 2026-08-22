@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- `ward pii` and `ward leaks` no longer abort the turn on PreToolUse. A match
+  now returns `hookSpecificOutput.permissionDecision: "ask"` (exit 0), which
+  surfaces a permission prompt naming the category and a masked excerpt of what
+  fired. Approving runs the tool; rejecting stops it exactly as the old block
+  did. A false positive now costs one keystroke instead of an aborted turn.
+  UserPromptSubmit still blocks on exit 2 — the hook API has no way to rewrite
+  a submitted prompt. PostToolUse redaction is unchanged.
+
+### Fixed
+
+- Integration tests pinned `HOME` to the cargo target tmpdir. Previously they
+  inherited the developer's real `HOME`, so an active `ward disable -m N`
+  turned every blocking assertion into a false pass.
+
 ## [0.2.0] — 2026-07-22
 
 ### Added

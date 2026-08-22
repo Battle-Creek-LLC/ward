@@ -8,16 +8,27 @@ Ward scans every prompt you send and every tool call Claude makes, blocking sens
 
 | Subcommand | Hook Events | Purpose |
 |---|---|---|
-| `ward pii` | UserPromptSubmit, PreToolUse, PostToolUse | Block SSNs, credit cards, emails, phone numbers |
-| `ward leaks` | UserPromptSubmit, PreToolUse, PostToolUse | Block API keys, cloud credentials, tokens, passwords, private keys, connection strings |
+| `ward pii` | UserPromptSubmit, PreToolUse, PostToolUse | Catch SSNs, credit cards, emails, phone numbers |
+| `ward leaks` | UserPromptSubmit, PreToolUse, PostToolUse | Catch API keys, cloud credentials, tokens, passwords, private keys, connection strings |
 | `ward log` | All events | Structured event logging to `~/.ward/events.jsonl` |
 
-On UserPromptSubmit and PreToolUse, a match **blocks** (exit 2) before anything
-leaves your machine. On PostToolUse the tool has already run, so blocking is
-impossible — instead ward **redacts**: it rewrites the tool output via the
-hook's `updatedToolOutput` field, replacing each secret with a
-`[WARD LEAKS REDACTED: <category>]` (or `WARD PII`) marker before Claude ever
-sees it. If a match can't be masked in place, the whole output is withheld.
+Each hook event gets the strongest response its API allows:
+
+| Event | On a match | Why |
+|---|---|---|
+| UserPromptSubmit | **blocks** (exit 2) | no API exists to rewrite a submitted prompt |
+| PreToolUse | **asks** — you approve or reject at the permission prompt | the tool hasn't run; a false positive costs one keystroke |
+| PostToolUse | **redacts** the output in place | the tool already ran, so blocking is impossible |
+
+On PreToolUse ward returns `permissionDecision: "ask"` with a reason naming the
+category and a partially-masked excerpt, so you can tell a real credential from
+a false positive before deciding. Rejecting stops the tool call exactly as a
+block would.
+
+On PostToolUse ward rewrites the tool output via the hook's `updatedToolOutput`
+field, replacing each secret with a `[WARD LEAKS REDACTED: <category>]` (or
+`WARD PII`) marker before Claude ever sees it. If a match can't be masked in
+place, the whole output is withheld.
 
 ## Detection Coverage
 
@@ -182,7 +193,7 @@ ward pii + ward leaks  (UserPromptSubmit hook)
                 v
           ward pii + ward leaks  (PreToolUse hook)
                 |
-                +-- Secret found -> exit 2 -> tool call blocked
+                +-- Secret found -> permissionDecision "ask" -> you approve or reject
                 +-- Clean -> exit 0 -> tool executes
                           |
                           v

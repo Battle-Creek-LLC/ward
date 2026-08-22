@@ -1,7 +1,18 @@
 use assert_cmd::Command;
 use predicates::prelude::*;
 fn ward() -> Command {
-    Command::cargo_bin("ward").unwrap()
+    let mut cmd = Command::cargo_bin("ward").unwrap();
+    // Pin HOME to the target tmpdir so a real `ward disable -m N` on the
+    // developer's machine can't silently turn every assertion into a pass.
+    cmd.env("HOME", env!("CARGO_TARGET_TMPDIR"));
+    cmd
+}
+
+/// PreToolUse hands the decision to the user rather than aborting the turn:
+/// exit 0 plus an "ask" envelope naming the category that fired.
+fn asks(category: &str) -> impl Predicate<str> {
+    predicate::str::contains(r#""permissionDecision":"ask""#)
+        .and(predicate::str::contains(category.to_string()))
 }
 
 #[test]
@@ -25,13 +36,13 @@ fn test_pii_blocked_ssn() {
 }
 
 #[test]
-fn test_pii_blocked_email_in_edit() {
+fn test_pii_asks_on_email_in_edit() {
     ward()
         .arg("pii")
         .write_stdin(r#"{"hook_event_name":"PreToolUse","tool_name":"Edit","tool_input":{"new_string":"contact john@example.com for details"}}"#)
         .assert()
-        .code(2)
-        .stderr(predicate::str::contains("Email"));
+        .success()
+        .stdout(asks("Email"));
 }
 
 #[test]
@@ -65,43 +76,43 @@ fn test_leaks_blocked_github_pat() {
 }
 
 #[test]
-fn test_leaks_blocked_aws_key() {
+fn test_leaks_asks_on_aws_key() {
     ward()
         .arg("leaks")
         .write_stdin(r#"{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7FAKEK5Y"}}"#)
         .assert()
-        .code(2)
-        .stderr(predicate::str::contains("AWS"));
+        .success()
+        .stdout(asks("AWS"));
 }
 
 #[test]
-fn test_leaks_blocked_stripe_key() {
+fn test_leaks_asks_on_stripe_key() {
     ward()
         .arg("leaks")
         .write_stdin(r#"{"hook_event_name":"PreToolUse","tool_name":"Write","tool_input":{"content":"STRIPE_KEY=sk_live_abc123def456ghi789jkl"}}"#)
         .assert()
-        .code(2)
-        .stderr(predicate::str::contains("Stripe"));
+        .success()
+        .stdout(asks("Stripe"));
 }
 
 #[test]
-fn test_leaks_blocked_connection_string() {
+fn test_leaks_asks_on_connection_string() {
     ward()
         .arg("leaks")
         .write_stdin(r#"{"hook_event_name":"PreToolUse","tool_name":"Write","tool_input":{"content":"DATABASE_URL=postgres://admin:s3cret@db.host:5432/prod"}}"#)
         .assert()
-        .code(2)
-        .stderr(predicate::str::contains("Connection String").or(predicate::str::contains("Env Secret")));
+        .success()
+        .stdout(asks("Connection String").or(asks("Env Secret")));
 }
 
 #[test]
-fn test_leaks_blocked_private_key() {
+fn test_leaks_asks_on_private_key() {
     ward()
         .arg("leaks")
         .write_stdin(r#"{"hook_event_name":"PreToolUse","tool_name":"Edit","tool_input":{"new_string":"-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA0Z3VS5JJcds3xfn/ygWyF6PkPfcLBBnBMBFOAlwLwHBLFkJQ\nmore_data_here_to_pad_the_key_to_sufficient_length\n-----END RSA PRIVATE KEY-----"}}"#)
         .assert()
-        .code(2)
-        .stderr(predicate::str::contains("Private Key"));
+        .success()
+        .stdout(asks("Private Key"));
 }
 
 #[test]
