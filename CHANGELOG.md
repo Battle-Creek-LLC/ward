@@ -17,6 +17,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   UserPromptSubmit still blocks on exit 2 — the hook API has no way to rewrite
   a submitted prompt. PostToolUse redaction is unchanged.
 
+### Added
+
+- Configuration via `~/.ward/config.toml` and per-repo `.ward.toml`, both
+  optional. Sets the response mode (`block`, `ask`, `warn`, `redact`, `off`)
+  per event and per category, and allowlists known-good values by literal,
+  regex, or file glob. The repo file overlays the user file key by key;
+  allowlists concatenate. With neither file present, behavior is unchanged.
+- A mode the hook event can't express degrades to the nearest mode that is no
+  weaker — `ask` to `block` on UserPromptSubmit, `block` to `redact` on
+  PostToolUse — so a config typo can't silently let a credential through.
+- `warn` mode: allows the event but reports what was seen to Claude via
+  `hookSpecificOutput.additionalContext`. Available on all three events.
+- `ward allow <value>` appends an allowlist entry after a false positive,
+  with `--pattern`, `--path`, `--local`, and `--list`. Existing comments and
+  key order in the config file are preserved.
+
 ### Fixed
 
 - Integration tests pinned `HOME` to the cargo target tmpdir. Previously they

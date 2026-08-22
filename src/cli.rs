@@ -25,4 +25,22 @@ pub enum Command {
     },
     /// Re-enable ward scanning (removes disable file)
     Enable,
+    /// Add an allowlist entry so a known-good value stops firing
+    Allow {
+        /// The value to allow. Matched literally against the detected text
+        /// unless --pattern or --path is given.
+        entry: Option<String>,
+        /// Treat ENTRY as a regex tested against the detected text
+        #[arg(long, conflicts_with = "path")]
+        pattern: bool,
+        /// Treat ENTRY as a file glob; matching files are not scanned
+        #[arg(long)]
+        path: bool,
+        /// Write to ./.ward.toml instead of ~/.ward/config.toml
+        #[arg(long)]
+        local: bool,
+        /// Print the active config files instead of adding an entry
+        #[arg(long, conflicts_with_all = ["pattern", "path", "local"])]
+        list: bool,
+    },
 }
